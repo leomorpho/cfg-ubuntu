@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Print policy file to editable plaintext
+# sudo twadmin --print-polfile > /etc/tripwire/twpol.txt
+
+# Edit twpol.txt
+# sudo vi twpol.txt
+
+# Rewrite config from twpol.txt
+sudo twadmin -m P /etc/tripwire/twpol.txt
+
+# Delete the plain text policy file
+sudo rm /etc/tripwire/twpol.txt
+
+# Reinitialize database
+sudo tripwire --init

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+DIR=/var/lib/tripwire/report
+#HOST='hostname -s'
+HOST=`hostname -s`
+LAST_REPORT=`ls -1t $DIR/$HOST-*.twr | head -1`
+#sudo tripwire --check
+sudo twprint --print-report --twrfile "$LAST_REPORT"

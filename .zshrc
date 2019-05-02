@@ -182,7 +182,9 @@ alias ma="marks"
 alias config='/usr/bin/git --git-dir=/Users/leo/.osx_cfg/ --work-tree=/Users/leo'
 
 alias backupleo="caffeinate -s rsync -aH --delete --info=progress2 /Users/leo /Applications /Volumes/MacbookPro-leo"
-alias backupall="sudo caffeinate -s rsync -aH --delete --info=progress2 / /Volumes/MacbookPro-leo"
+alias backupall='sudo rsync -azPH --delete / --exclude={"/home/leo/NAS/*","/snap","/home/leo/.cache/*","/home/leo/MEGA/*","/home/leo/MEGAsync/*","/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} leo@192.168.1.82:/media/2TB_crypt/ubuntu_leo/rsync'
+alias backuphome='rsync -azPH --delete /home/leo --exclude={"leo/NAS/*","leo/.cache/*","leo/MEGA/*","leo/MEGAsync/*"} leopi:/media/2TB_crypt/ubuntu_leo/rsync'
+alias NAS="sshfs -o IdentityFile=/home/leo/.ssh/id_rsa leo@192.168.1.82:/media/2TB_crypt/ubuntu_leo ~/NAS"
 
 # Tor
 alias starttor='service tor start'
