@@ -15,6 +15,16 @@ set foldlevel=3
 " }}}
 set expandtab shiftwidth=4 softtabstop=4 tabstop=8
 
+" Make search case insensitive if all letters are in lower case
+set ignorecase
+" Make search case sensitive if some letters are in upper case
+set smartcase
+
+" Do not hide any markdown
+set conceallevel=0
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 0
+
 " Do not load last opened file
 :let g:session_autoload = 'no'
 
@@ -23,6 +33,16 @@ nnoremap <space> za
 vnoremap <space> zf
 
 map <C-n> :NERDTreeToggle<CR>
+
+" Vim-Vuejs settings:
+autocmd FileType vue syntax sync fromstart
+let g:vue_disable_pre_processors = 1
+
+" Make ag and ack live alongside
+let g:ackprg = 'ag --nogroup --nocolor --column'
+
+" Add fzf directory to @runtimepath
+set rtp+=/usr/local/opt/fzf
 
 " Reload init.vim on edits
 if has ('autocmd') " Remain compatible with earlier versions
@@ -82,7 +102,29 @@ Plug 'xolox/vim-session'
 Plug 'powerman/vim-plugin-autosess'
 
 Plug 'mattn/emmet-vim'
-Plug 'euclio/vim-markdown-composer',
+
+function! BuildComposer(info)
+  if a:info.status != 'unchanged' || a:info.force
+    if has('nvim')
+      !cargo build --release
+    else
+      !cargo build --release --no-default-features --features json-rpc
+    endif
+  endif
+endfunction
+Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+
+" Javascript and Vuejs
+Plug 'posva/vim-vue'
+
+" Add color to any css colors
+Plug 'ap/vim-css-color'
+
+" Add native Ack support to Vim
+Plug 'mileszs/ack.vim'
 
 " Code folding 
 Plug 'tmhedberg/SimpylFold'

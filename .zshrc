@@ -134,7 +134,7 @@ alias x="exit"
 alias sz="source ~/.zshrc"
 alias zshrc="nvim ~/.zshrc"
 alias i3c="nvim ~/.config/i3/config"
-alias nvimrc="nvim .config/nvim/init.vim"
+alias nvimrc="nvim ~/.config/nvim/init.vim"
 alias octave='octave-cli'
 alias py='ipython'
 # "sudo -i" does the same
@@ -144,6 +144,11 @@ alias root='sudo su -'
 alias icat="kitty +kitten icat"
 alias d="kitty +kitten diff"
 alias gitdiff="git difftool --no-symlinks --dir-diff"
+alias light="kitty_theme light"
+alias dark="kitty_theme dark"
+
+# colored cat
+alias ccat='pygmentize -g'
 
 # Show only dotfiles
 alias l.="ls -d .*"
@@ -195,6 +200,9 @@ alias services='service --status-all'
 alias venvnew='python3 -m venv venv'
 alias venv='source venv/bin/activate'
 
-
+export PATH=$PATH:"/home/linuxbrew/.linuxbrew/bin"
+export PATH=$PATH":$HOME/.cargo/bin"
 export PATH=$PATH":$HOME/.local/bin"
 alias config='/usr/bin/git --git-dir=/home/leo/.cfg/ --work-tree=/home/leo'
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
