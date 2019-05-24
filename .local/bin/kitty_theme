@@ -1,0 +1,23 @@
+#!/bin/bash
+light_theme=Belafonte_Day
+dark_theme=Belafonte_Night
+theme=""
+if [ $# -gt 1 ]; 
+then
+    printf "Please provide only 1 theme.\n"
+elif [ "$1" == "" ];
+then
+    printf "You need to specify a kitty theme.\n"
+elif [ "$1" == "--help" ] || [ "$1" == "-h" ];
+then
+    printf "\t-- options are light' or 'dark'.\n"
+elif [ "$1" == "light" ];
+then
+    theme=$light_theme
+elif [ "$1" == "dark" ];
+then
+    theme=$dark_theme
+fi
+
+ln -s -f $HOME/.config/kitty/kitty-themes/themes/$theme.conf \
+    ~/.config/kitty/theme.conf
