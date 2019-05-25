@@ -1,0 +1,21 @@
+#!/bin/bash
+# Set tool paths
+RSYNC=/usr/bin/rsync
+ECHO=/bin/echo
+
+# Set backup targets
+SRC="/"
+DEST="leo@192.168.1.2:/media/2TB_crypt/ubuntu_leo/system"
+# RSYNC_EXC="/Users/leo/.local/lib/rsync_excludes_linux.txt"
+RSYNC_EXC={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"}
+ID="~/.ssh/id_rsa"
+
+# Change t root
+# root
+
+sudo $RSYNC -aAXvz --info=progress2 $ID --delete $SRC --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"} $DEST
+
+${ECHO} "$PROG: backup interrupted or completed"
+
+exit 0
+
