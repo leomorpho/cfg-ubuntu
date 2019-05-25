@@ -20,6 +20,9 @@ set ignorecase
 " Make search case sensitive if some letters are in upper case
 set smartcase
 
+" Allow mouse
+set mouse=a
+
 " Do not hide any markdown
 set conceallevel=0
 let g:indentLine_concealcursor = 'inc'
