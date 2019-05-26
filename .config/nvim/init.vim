@@ -1,86 +1,133 @@
-set encoding=utf-8 
+syntax enable			" enable syntax processing
+" colorscheme molokayo		" set theme
+set termguicolors		
 
-"set mouse=a
-set number              " show line numbers 
+" -------------------------------------------------------->
+"  Misc
+set backspace=indent,eol,start	" modern backspace behaviour
+set clipboard=unnamed		" copy to system's clipboard
+
+" -------------------------------------------------------->
+"  Spaces and Tabs
+set tabstop=4			" 4 space tab
+set expandtab			" use spaces for tabs
+set softtabstop=4		" 4 space tab
+set shiftwidth=4
+set modelines=1 		" file-specific changes for nvim
+filetype indent on
+filetype plugin on
+set autoindent
+
+" -------------------------------------------------------->
+"  UI Layout
+set number              " show line numbers
 set showcmd             " show command in bottom bar
 set nocursorline        " highlight current line
+set wildmenu
+set lazyredraw
 set showmatch           " highlight matching parenthesis
-set wildmenu            " visual autocomplete for command menu
-set lazyredraw          " redraw only when we need to (faster macros)
+set fillchars=vert:\|
 
-set foldenable          " enable folding (showall folds)
-set foldnestmax=10
-set foldmethod=indent
-set foldlevel=3
-" }}}
-set expandtab shiftwidth=4 softtabstop=4 tabstop=8
+" -------------------------------------------------------->
+"  Searching
+set ignorecase          " ignore case when searching
+set incsearch           " search as characters are entered
+set hlsearch            " highlight all matches
 
-" Make search case insensitive if all letters are in lower case
-set ignorecase
-" Make search case sensitive if some letters are in upper case
-set smartcase
+" -------------------------------------------------------->
+"  Folding
+set foldmethod=indent   " fold based on indent level
+set foldnestmax=10      " max 10 depth
+set foldenable          " don't fold files by default on open
+nnoremap <space> za     
+set foldlevelstart=10   " start with fold level of 1
 
-" Allow mouse
-set mouse=a
+" -------------------------------------------------------->
+"  Autogroups
+augroup configgroup
+    autocmd!
+    autocmd VimEnter * highlight clear SignColumn
+    autocmd BufWritePre *.php,*.py,*.js,*.txt,*.hs,*.java,*.md,*.rb :call <SID>StripTrailingWhitespaces()
+    autocmd BufEnter *.cls setlocal filetype=java
+    autocmd BufEnter *.zsh-theme setlocal filetype=zsh
+    autocmd BufEnter Makefile setlocal noexpandtab
+    autocmd BufEnter *.sh setlocal tabstop=2
+    autocmd BufEnter *.sh setlocal shiftwidth=2
+    autocmd BufEnter *.sh setlocal softtabstop=2
+    autocmd BufEnter *.py setlocal tabstop=4
+    autocmd BufEnter *.md setlocal ft=markdown
+    autocmd BufEnter *.go setlocal noexpandtab
+    autocmd BufEnter *.avsc setlocal ft=json
+augroup END
 
-" Do not hide any markdown
-set conceallevel=0
-let g:indentLine_concealcursor = 'inc'
-let g:indentLine_conceallevel = 0
+" -------------------------------------------------------->
+"  Backups
+set backup
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set backupskip=/tmp/*,/private/tmp/*
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set writebackup
 
-" Do not load last opened file
-:let g:session_autoload = 'no'
-
-" space folds code
-nnoremap <space> za 
-vnoremap <space> zf
-
+" -------------------------------------------------------->
+"  Keybindings
+noremap <F5> :Autoformat<CR>
+autocmd FileType python map <buffer> <F6> :call Flake8()<CR>
 map <C-n> :NERDTreeToggle<CR>
 
-" Vim-Vuejs settings:
-autocmd FileType vue syntax sync fromstart
-let g:vue_disable_pre_processors = 1
+" -------------------------------------------------------->
+" Markdown
+set conceallevel=0                  " Do not hide any markdown
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 0
+:let g:session_autoload = 'no'      " Do not load last opened file
 
-" Make ag and ack live alongside
-let g:ackprg = 'ag --nogroup --nocolor --column'
 
-" Add fzf directory to @runtimepath
-set rtp+=/usr/local/opt/fzf
-
+" -------------------------------------------------------->
+"  Misc Functions
 " Reload init.vim on edits
 if has ('autocmd') " Remain compatible with earlier versions
- augroup vimrc     " Source vim configuration upon save
-    autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
-    autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
-  augroup END
+    augroup vimrc     " Source vim configuration upon save
+        autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
+        autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
+    augroup END
 endif " has autocmd<Paste>
 
-call plug#begin('~/.config/nvim/plugins/plugged')
+" -------------------------------------------------------->
+"  Plugin Options
+let g:ackprg = 'ag --nogroup --nocolor --column'    " Make ag and ack live alongside
 
-" neovim Plugins {{{
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+" CtrlP options
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+
+" Use ag over grep for CtrlP if available
+if executable('ag')
+    " Use Ag over Grep
+    set grepprg=ag\ --nogroup\ --nocolor
+
+    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 endif
-let g:deoplete#enable_at_startup = 1
 
+
+" -------------------------------------------------------->
+"  Plugins
+
+call plug#begin('~/.config/nvim/plugins/plugged')
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
 Plug 'zchee/deoplete-jedi'
 Plug 'tweekmonster/deoplete-clang2'
-Plug 'roxma/nvim-yarp'			" Dependency of deoplete
-Plug 'roxma/vim-hug-neovim-rpc'		" Dependency of deoplete
+Plug 'roxma/nvim-yarp'                  " Dependency of deoplete
+Plug 'roxma/vim-hug-neovim-rpc'         " Dependency of deoplete
 
 Plug 'donRaphaco/neotex', { 'for': 'tex' }
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-Plug 'vim-utils/vim-man'
-Plug 'janko-m/vim-test'
-Plug 'ryanoasis/vim-devicons'
-Plug 'w0rp/ale'
-Plug 'kchmck/vim-coffee-script'
-" Plug 'airblade/vim-gitgutter'
-" }}}
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'} " Semantic highlighting for python
+Plug 'vim-utils/vim-man'                " Man pages in neovim
+Plug 'ryanoasis/vim-devicons'           " Add nerfont icons to all plugins
+Plug 'w0rp/ale'                         " Check syntax and fix files asynchronously
+
+" Themes
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 Plug 'fenetikm/falcon'
 Plug 'mhartington/oceanic-next'
@@ -93,18 +140,8 @@ Plug 'vim-scripts/cyclecolor'
 Plug 'tomasr/molokai'
 Plug 'fmoralesc/molokayo'
 
-Plug 'vim-scripts/reload.vim'
-
 Plug 'junegunn/goyo.vim', {'for':'markdown'}
 autocmd! User goyo.vim echom 'Goyo is now loaded'
-
-Plug 'junegunn/limelight.vim'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-session'
-Plug 'powerman/vim-plugin-autosess'
-
-Plug 'mattn/emmet-vim'
 
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
@@ -115,7 +152,9 @@ function! BuildComposer(info)
     endif
   endif
 endfunction
+
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
@@ -129,16 +168,19 @@ Plug 'ap/vim-css-color'
 " Add native Ack support to Vim
 Plug 'mileszs/ack.vim'
 
-" Code folding 
+" Code folding
 Plug 'tmhedberg/SimpylFold'
-Plug 'vim-scripts/restore_view.vim'
+" Plug 'vim-scripts/restore_view.vim'
 
-" autoindent sometimes doesn't always do what you want (especially for PEP 8 standards).
-" The following fixes that.
-Plug 'vim-scripts/indentpython.vim'
+" Indentation can be hell for python, therefore these 2 guys!
+Plug 'nvie/vim-flake8'
+Plug 'Chiel92/vim-autoformat'
 
 " Syntax checking and highlighting for a bunch of languages
 Plug 'vim-syntastic/syntastic'
+
+" Fuzzy finder
+Plug 'ctrlpvim/ctrlp.vim'
 
 " PEP 8 checking
 Plug 'nvie/vim-flake8'
@@ -151,9 +193,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-" Super searching
-Plug 'kien/ctrlp.vim'
-
 " Show thin vertical lines at each indentation level
 Plug 'Yggdroot/indentLine'
 
@@ -162,9 +201,8 @@ Plug 'matze/vim-tex-fold'
 
 " Initialize plugin system
 call plug#end()
-"  }}}
 
-" neo-vim remote 
+" neo-vim remote
 let g:vimtex_compiler_progname = 'nvr'
 let g:vimtex_view_method = 'zathura'
 " To prevent conceal in LaTeX files
@@ -176,45 +214,16 @@ nnoremap <C-m> :SyntasticCheck<CR> :SyntasticToggleMode<CR>
 "}}}
 
 " NerdTree settings {{{
-" Open Nerdtree by default when no specific document is open
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists(“s:std_in”) | NERDTree | endif
-
-" Automatically close nvim if only remaining tab is Nertree
-" autocmd bufenter * if (winnr(“$”) == 1 && exists(“b:NERDTreeType”) && b:NERDTreeType == “primary”) | q | endif
-
-" Hide .pyc files for nerdtree
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
-
-" Making Nerdtree prettier
-" let NERDTreeMinimalUI = 1
-" let NERDTreeDirArrows = 1
-
-" Shortcut to open NERDtree
-map <C-n> :NERDTreeToggle<CR>
-" }}}
-
-
-set termguicolors
-" Change profile according to iTerm profile (for light and dark)
-let iterm_profile = $ITERM_PROFILE
-if iterm_profile == "dark"
-    set background=dark
-else
-    set background=light
-endif
-
-syntax enable           " enable syntax processing
-
-" Colorscheme will not work if before 'set termguiclors' above
-" colorscheme CandyPaper 
-colorscheme molokayo
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 
 " NERDTree Settings {{{
 " NERDTress File highlighting
 function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
- exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
- exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+    exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+    exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
 endfunction
 
 call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
@@ -229,8 +238,6 @@ call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
 call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
 call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
 call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
-" call NERDTreeHighlightFile('py', 'Magenta', 'none', '#ff00ff', '#151515')
-" }}}
-:set cmdheight=1
-set rtp+=/usr/local/opt/fzf
 
+" Add fzf directory to @runtimepath
+set rtp+=/usr/local/opt/fzf

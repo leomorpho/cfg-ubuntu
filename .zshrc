@@ -149,6 +149,7 @@ alias dark="kitty_theme dark"
 
 # colored cat
 alias ccat='pygmentize -g'
+alias tt='tree -L 2'
 
 # Show only dotfiles
 alias l.="ls -d .*"
