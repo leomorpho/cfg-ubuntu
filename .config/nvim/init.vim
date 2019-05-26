@@ -44,6 +44,17 @@ set foldlevelstart=10   " start with fold level of 1
 
 " -------------------------------------------------------->
 "  Autogroups
+
+function! <SID>StripTrailingWhitespaces()
+  " save last search & cursor position
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  %s/\s\+$//e
+  let @/=_s
+  call cursor(l, c)
+endfunction
+
 augroup configgroup
     autocmd!
     autocmd VimEnter * highlight clear SignColumn
@@ -114,12 +125,15 @@ endif
 "  Plugins
 
 call plug#begin('~/.config/nvim/plugins/plugged')
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 let g:deoplete#enable_at_startup = 1
-Plug 'zchee/deoplete-jedi'
-Plug 'tweekmonster/deoplete-clang2'
-Plug 'roxma/nvim-yarp'                  " Dependency of deoplete
-Plug 'roxma/vim-hug-neovim-rpc'         " Dependency of deoplete
 
 Plug 'donRaphaco/neotex', { 'for': 'tex' }
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'} " Semantic highlighting for python
