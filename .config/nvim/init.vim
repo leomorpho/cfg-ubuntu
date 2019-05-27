@@ -66,7 +66,6 @@ augroup configgroup
     autocmd BufEnter *.sh setlocal shiftwidth=2
     autocmd BufEnter *.sh setlocal softtabstop=2
     autocmd BufEnter *.py setlocal tabstop=4
-    autocmd BufEnter *.md setlocal ft=markdown
     autocmd BufEnter *.go setlocal noexpandtab
     autocmd BufEnter *.avsc setlocal ft=json
 augroup END
@@ -122,10 +121,14 @@ endif
 
 
 " -------------------------------------------------------->
+" -------------------------------------------------------->
 "  Plugins
 
 call plug#begin('~/.config/nvim/plugins/plugged')
 
+" -------------------------------------------------------->
+"  General
+"
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -135,27 +138,49 @@ else
 endif
 let g:deoplete#enable_at_startup = 1
 
-Plug 'donRaphaco/neotex', { 'for': 'tex' }
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'} " Semantic highlighting for python
 Plug 'vim-utils/vim-man'                " Man pages in neovim
 Plug 'ryanoasis/vim-devicons'           " Add nerfont icons to all plugins
 Plug 'w0rp/ale'                         " Check syntax and fix files asynchronously
 
-" Themes
-Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-Plug 'fenetikm/falcon'
-Plug 'mhartington/oceanic-next'
-Plug 'joshdick/onedark.vim'
-Plug 'flazz/vim-colorschemes'
-Plug 'morhetz/gruvbox'
-Plug 'drewtempelmeyer/palenight.vim'
-Plug 'ayu-theme/ayu-vim'
-Plug 'vim-scripts/cyclecolor'
-Plug 'tomasr/molokai'
-Plug 'fmoralesc/molokayo'
+Plug 'tmhedberg/SimpylFold'             " Code folding
 
-Plug 'junegunn/goyo.vim', {'for':'markdown'}
-autocmd! User goyo.vim echom 'Goyo is now loaded'
+Plug 'vim-airline/vim-airline'          " Vim-airline status bar
+" Plug 'vim-airline/vim-airline-themes'
+
+Plug 'vim-syntastic/syntastic'  " Syntax checking and highlighting for a bunch of languages
+
+Plug 'ctrlpvim/ctrlp.vim'       " Fuzzy finder
+
+Plug 'scrooloose/nerdtree'      " File browsing
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+Plug 'Yggdroot/indentLine'      " Show thin vertical lines at each indentation level
+
+" -------------------------------------------------------->
+"  Latex
+Plug 'donRaphaco/neotex', { 'for': 'tex' }
+Plug 'lervag/vimtex'
+Plug 'matze/vim-tex-fold'
+
+" -------------------------------------------------------->
+" Themes
+"
+" Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+" Plug 'fenetikm/falcon'
+" Plug 'mhartington/oceanic-next'
+" Plug 'joshdick/onedark.vim'
+" Plug 'flazz/vim-colorschemes'
+" Plug 'morhetz/gruvbox'
+" Plug 'drewtempelmeyer/palenight.vim'
+" Plug 'ayu-theme/ayu-vim'
+" Plug 'vim-scripts/cyclecolor'
+" Plug 'tomasr/molokai'
+" Plug 'fmoralesc/molokayo'
+
+" -------------------------------------------------------->
+"  Markdown
+"
 
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
@@ -168,11 +193,18 @@ function! BuildComposer(info)
 endfunction
 
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+" let g:markdown_composer_open_browser = 1
 
-Plug 'godlygeek/tabular'
+Plug 'godlygeek/tabular'            " Dependency of vim-markdown
 Plug 'plasticboy/vim-markdown'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+" " Markdown config vim file
+" source /home/leo/.config/nvim/config/markdown.vim
 
+" -------------------------------------------------------->
+"  Language-specific
+"
 " Javascript and Vuejs
 Plug 'posva/vim-vue'
 
@@ -182,36 +214,14 @@ Plug 'ap/vim-css-color'
 " Add native Ack support to Vim
 Plug 'mileszs/ack.vim'
 
-" Code folding
-Plug 'tmhedberg/SimpylFold'
-" Plug 'vim-scripts/restore_view.vim'
 
 " Indentation can be hell for python, therefore these 2 guys!
 Plug 'nvie/vim-flake8'
 Plug 'Chiel92/vim-autoformat'
 
-" Syntax checking and highlighting for a bunch of languages
-Plug 'vim-syntastic/syntastic'
-
-" Fuzzy finder
-Plug 'ctrlpvim/ctrlp.vim'
-
 " PEP 8 checking
 Plug 'nvie/vim-flake8'
 
-" Vim-airline status bar
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-" File browsing
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-
-" Show thin vertical lines at each indentation level
-Plug 'Yggdroot/indentLine'
-
-Plug 'lervag/vimtex'
-Plug 'matze/vim-tex-fold'
 
 " Initialize plugin system
 call plug#end()
