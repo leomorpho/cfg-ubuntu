@@ -58,7 +58,7 @@ endfunction
 augroup configgroup
     autocmd!
     autocmd VimEnter * highlight clear SignColumn
-    autocmd BufWritePre *.php,*.py,*.js,*.txt,*.hs,*.java,*.md,*.rb :call <SID>StripTrailingWhitespaces()
+    autocmd BufWritePre *.php,*.py,*.js,*.txt,*.hs,*.java,*.rb :call <SID>StripTrailingWhitespaces()
     autocmd BufEnter *.cls setlocal filetype=java
     autocmd BufEnter *.zsh-theme setlocal filetype=zsh
     autocmd BufEnter Makefile setlocal noexpandtab
@@ -197,6 +197,7 @@ Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 
 Plug 'godlygeek/tabular'            " Dependency of vim-markdown
 Plug 'plasticboy/vim-markdown'
+Plug 'junegunn/goyo.vim'
 " Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 " Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 " " Markdown config vim file

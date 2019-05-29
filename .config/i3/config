@@ -218,5 +218,7 @@ exec --no-startup-id source ~/.fehbg
 # Disable touchpad when keyboard is used
 exec /usr/local/bin/dispad
 
+exec --no-startup-id compton --config ~/.config/compton.conf -b
+
 # exec --no-startup-id /usr/bin/brave-browser
 # exec --no-startup-id /snap/bin/spotify
