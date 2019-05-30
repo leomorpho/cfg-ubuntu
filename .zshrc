@@ -118,23 +118,18 @@ fi
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-# Kitty shell completion for zsh
 autoload -Uz compinit
 compinit
 # Completion for kitty
 kitty + complete setup zsh | source /dev/stdin
 
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 alias x="exit"
 alias sz="source ~/.zshrc"
 alias zshrc="nvim ~/.zshrc"
 alias i3c="nvim ~/.config/i3/config"
 alias nvimrc="nvim ~/.config/nvim/init.vim"
+alias kittyrc="nvim ~/.config/kitty/kitty.conf"
 alias octave='octave-cli'
 alias py='ipython'
 # "sudo -i" does the same
@@ -204,6 +199,7 @@ alias venv='source venv/bin/activate'
 export PATH=$PATH:"/home/linuxbrew/.linuxbrew/bin"
 export PATH=$PATH":$HOME/.cargo/bin"
 export PATH=$PATH":$HOME/.local/bin"
+export PATH=$PATH":$HOME/.local/bin/authored/"
 alias config='/usr/bin/git --git-dir=/home/leo/.cfg/ --work-tree=/home/leo'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
