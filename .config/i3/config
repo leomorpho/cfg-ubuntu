@@ -219,7 +219,10 @@ exec --no-startup-id source ~/.fehbg
 # Disable touchpad when keyboard is used
 exec /usr/local/bin/dispad
 
-exec --no-startup-id compton --config ~/.config/compton.conf -b
-
+# Kill gnome-keyring because it prompts me for "ssh-add" every time in
+# order to ssh into anythin
+exec killall gnome-keyring
+# exec --no-startup-id compton --config ~/.config/compton.conf -b
+exec compton
 # exec --no-startup-id /usr/bin/brave-browser
 # exec --no-startup-id /snap/bin/spotify

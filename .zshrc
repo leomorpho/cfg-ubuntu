@@ -123,7 +123,7 @@ compinit
 # Completion for kitty
 kitty + complete setup zsh | source /dev/stdin
 
-# Example aliases
+# System
 alias x="exit"
 alias sz="source ~/.zshrc"
 alias zshrc="nvim ~/.zshrc"
@@ -132,6 +132,7 @@ alias nvimrc="nvim ~/.config/nvim/init.vim"
 alias kittyrc="nvim ~/.config/kitty/kitty.conf"
 alias octave='octave-cli'
 alias py='ipython'
+alias rm='trash'
 # "sudo -i" does the same
 alias root='sudo su -'
 

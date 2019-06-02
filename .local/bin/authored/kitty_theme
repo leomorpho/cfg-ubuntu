@@ -1,6 +1,8 @@
 #!/bin/bash
 light_theme=AtomOneLight
-dark_theme=Argonaut
+# dark_theme=Argonaut
+dark_theme=Dark_Pastel
+#dark_theme=Galaxy
 theme=""
 if [ $# -gt 1 ]; 
 then
@@ -16,8 +18,10 @@ then
     theme=$light_theme
 elif [ "$1" == "dark" ];
 then
-    # theme=$dark_theme
+    theme=$dark_theme
     unlink $HOME/.config/kitty/theme.conf 
+    ln -s -f $HOME/.config/kitty/kitty-themes/themes/$theme.conf \
+        ~/.config/kitty/theme.conf
 fi
 
 ln -s -f $HOME/.config/kitty/kitty-themes/themes/$theme.conf \

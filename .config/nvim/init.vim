@@ -84,6 +84,8 @@ noremap <F5> :Autoformat<CR>
 autocmd FileType python map <buffer> <F6> :call Flake8()<CR>
 map <C-n> :NERDTreeToggle<CR>
 
+" Allows writing to files with root priviledges
+cmap w!! w !sudo tee % > /dev/null
 " -------------------------------------------------------->
 " Markdown
 set conceallevel=0                  " Do not hide any markdown
@@ -91,6 +93,11 @@ let g:indentLine_concealcursor = 'inc'
 let g:indentLine_conceallevel = 0
 :let g:session_autoload = 'no'      " Do not load last opened file
 
+" Setting for ferrine/md-img-paste.vim
+autocmd FileType markdown nmap <silent> <leader>p :call mdip#MarkdownClipboardImage()<CR>
+" there are some defaults for image directory and image name, you can change them
+" let g:mdip_imgdir = 'img'
+" let g:mdip_imgname = 'image'
 
 " -------------------------------------------------------->
 "  Misc Functions
@@ -198,10 +205,8 @@ Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 Plug 'godlygeek/tabular'            " Dependency of vim-markdown
 Plug 'plasticboy/vim-markdown'
 Plug 'junegunn/goyo.vim'
-" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
-" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
-" " Markdown config vim file
-" source /home/leo/.config/nvim/config/markdown.vim
+" paste img and add them to /img in current dir
+Plug 'ferrine/md-img-paste.vim'
 
 " -------------------------------------------------------->
 "  Language-specific
@@ -210,18 +215,42 @@ Plug 'junegunn/goyo.vim'
 Plug 'posva/vim-vue'
 
 " Add color to any css colors
-Plug 'ap/vim-css-color'
+" Plug 'ap/vim-css-color'
+" Color and W3C legal color
+Plug 'chrisbra/Colorizer'
+let g:colorizer_auto_filetype='css,html,conf'
+" Pick colors with :Pick
+Plug 'DougBeney/pickachu'
+
+" jinja templates within html
+Plug 'lepture/vim-jinja'
 
 " Add native Ack support to Vim
 Plug 'mileszs/ack.vim'
-
 
 " Indentation can be hell for python, therefore these 2 guys!
 Plug 'nvie/vim-flake8'
 Plug 'Chiel92/vim-autoformat'
 
-" PEP 8 checking
-Plug 'nvie/vim-flake8'
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'branch': 'release/1.x',
+  \ 'for': [
+    \ 'javascript',
+    \ 'typescript',
+    \ 'css',
+    \ 'less',
+    \ 'scss',
+    \ 'json',
+    \ 'graphql',
+    \ 'markdown',
+    \ 'vue',
+    \ 'lua',
+    \ 'php',
+    \ 'python',
+    \ 'ruby',
+    \ 'html',
+    \ 'swift' ] }
 
 
 " Initialize plugin system
@@ -243,6 +272,9 @@ let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
+
+" NerdTree ignore these filetypes
+let NERDTreeIgnore = ['\.pyc$']
 
 " NERDTree Settings {{{
 " NERDTress File highlighting
