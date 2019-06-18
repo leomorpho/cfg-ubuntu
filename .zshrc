@@ -196,11 +196,13 @@ alias services='service --status-all'
 # Python Aliases
 alias venvnew='python3 -m venv venv'
 alias venv='source venv/bin/activate'
+alias django='python manage.py'
 
 export PATH=$PATH:"/home/linuxbrew/.linuxbrew/bin"
 export PATH=$PATH":$HOME/.cargo/bin"
 export PATH=$PATH":$HOME/.local/bin"
 export PATH=$PATH":$HOME/.local/bin/authored/"
 alias config='/usr/bin/git --git-dir=/home/leo/.cfg/ --work-tree=/home/leo'
-
+export PATH="$PATH:$HOME/.npm/bin"
+export NODE_PATH="$NODE_PATH:$HOME/.npm/lib/node_modules"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

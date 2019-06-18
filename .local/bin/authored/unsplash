@@ -1,0 +1,6 @@
+#!/bin/bash
+# https://awik.io/generate-random-images-unsplash-without-using-api/
+
+wget -O /tmp/wallpaper.jpeg https://source.unsplash.com/random/1440x900/?wallpapers,nature,architecture,film,animals,travel
+
+feh --bg-scale /tmp/wallpaper.jpeg

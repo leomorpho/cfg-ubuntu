@@ -1,5 +1,6 @@
+filetype plugin on      " nvim tell me it should be before syntax on
+filetype plugin indent on   " for vim-anyfold
 syntax enable			" enable syntax processing
-" colorscheme molokayo		" set theme
 set termguicolors		
 
 " -------------------------------------------------------->
@@ -15,7 +16,6 @@ set softtabstop=4		" 4 space tab
 set shiftwidth=4
 set modelines=1 		" file-specific changes for nvim
 filetype indent on
-filetype plugin on
 set autoindent
 
 " -------------------------------------------------------->
@@ -30,6 +30,7 @@ set fillchars=vert:\|
 
 " -------------------------------------------------------->
 "  Searching
+set smartcase
 set ignorecase          " ignore case when searching
 set incsearch           " search as characters are entered
 set hlsearch            " highlight all matches
@@ -66,9 +67,25 @@ augroup configgroup
     autocmd BufEnter *.sh setlocal shiftwidth=2
     autocmd BufEnter *.sh setlocal softtabstop=2
     autocmd BufEnter *.py setlocal tabstop=4
+    autocmd BufEnter *.js setlocal tabstop=2
+    autocmd BufEnter *.js setlocal softtabstop=2
+    autocmd BufEnter *.js setlocal shiftwidth=2
+    autocmd BufEnter *.vue setlocal tabstop=2
+    autocmd BufEnter *.vue setlocal tabstop=2
+    autocmd BufEnter *.vue setlocal softtabstop=2
     autocmd BufEnter *.go setlocal noexpandtab
     autocmd BufEnter *.avsc setlocal ft=json
 augroup END
+
+" Save folds
+augroup AutoSaveFolds
+  autocmd!
+  autocmd BufWinLeave ?* mkview
+  autocmd BufWinEnter ?* silent! loadview
+augroup END
+
+" Fountain screenplay markup autocommands
+source ~/.config/nvim/config/fountain.vim
 
 " -------------------------------------------------------->
 "  Backups
@@ -94,7 +111,7 @@ let g:indentLine_conceallevel = 0
 :let g:session_autoload = 'no'      " Do not load last opened file
 
 " Setting for ferrine/md-img-paste.vim
-autocmd FileType markdown nmap <silent> <leader>p :call mdip#MarkdownClipboardImage()<CR>
+" autocmd FileType markdown nmap <silent> <leader>p :call mdip#MarkdownClipboardImage()<CR>
 " there are some defaults for image directory and image name, you can change them
 " let g:mdip_imgdir = 'img'
 " let g:mdip_imgname = 'image'
@@ -150,7 +167,13 @@ Plug 'vim-utils/vim-man'                " Man pages in neovim
 Plug 'ryanoasis/vim-devicons'           " Add nerfont icons to all plugins
 Plug 'w0rp/ale'                         " Check syntax and fix files asynchronously
 
+" Django and vim love story
+Plug 'tweekmonster/django-plus.vim'
+
 Plug 'tmhedberg/SimpylFold'             " Code folding
+let g:SimpylFold_docstring_preview = 1
+" Plug 'pseewald/vim-anyfold'
+" autocmd Filetype * AnyFoldActivate
 
 Plug 'vim-airline/vim-airline'          " Vim-airline status bar
 " Plug 'vim-airline/vim-airline-themes'
@@ -164,6 +187,8 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 
 Plug 'Yggdroot/indentLine'      " Show thin vertical lines at each indentation level
 
+" Vim snippets
+Plug 'honza/vim-snippets'
 " -------------------------------------------------------->
 "  Latex
 Plug 'donRaphaco/neotex', { 'for': 'tex' }
@@ -173,17 +198,17 @@ Plug 'matze/vim-tex-fold'
 " -------------------------------------------------------->
 " Themes
 "
-" Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-" Plug 'fenetikm/falcon'
-" Plug 'mhartington/oceanic-next'
-" Plug 'joshdick/onedark.vim'
-" Plug 'flazz/vim-colorschemes'
-" Plug 'morhetz/gruvbox'
-" Plug 'drewtempelmeyer/palenight.vim'
-" Plug 'ayu-theme/ayu-vim'
-" Plug 'vim-scripts/cyclecolor'
-" Plug 'tomasr/molokai'
-" Plug 'fmoralesc/molokayo'
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'fenetikm/falcon'
+Plug 'mhartington/oceanic-next'
+Plug 'joshdick/onedark.vim'
+Plug 'flazz/vim-colorschemes'
+Plug 'morhetz/gruvbox'
+Plug 'drewtempelmeyer/palenight.vim'
+Plug 'ayu-theme/ayu-vim'
+Plug 'vim-scripts/cyclecolor'
+Plug 'tomasr/molokai'
+Plug 'fmoralesc/molokayo'
 
 " -------------------------------------------------------->
 "  Markdown
@@ -206,13 +231,25 @@ Plug 'godlygeek/tabular'            " Dependency of vim-markdown
 Plug 'plasticboy/vim-markdown'
 Plug 'junegunn/goyo.vim'
 " paste img and add them to /img in current dir
-Plug 'ferrine/md-img-paste.vim'
+" Plug 'ferrine/md-img-paste.vim'
+
+" Fountain markdown for screenplays
+Plug 'vim-scripts/fountain.vim'
 
 " -------------------------------------------------------->
 "  Language-specific
 "
 " Javascript and Vuejs
 Plug 'posva/vim-vue'
+" detect different languages in .vue files
+Plug 'Shougo/context_filetype.vim'
+" Autocompletion for JS
+Plug 'ternjs/tern_for_vim'
+"JS linter
+" Plug 'neomake/neomake', { 'on': 'Neomake' }
+" let g:neomake_javascript_enabled_makers = ['eslint']
+" JS syntax highlighting
+Plug 'pangloss/vim-javascript'
 
 " Add color to any css colors
 " Plug 'ap/vim-css-color'
@@ -221,6 +258,9 @@ Plug 'chrisbra/Colorizer'
 let g:colorizer_auto_filetype='css,html,conf'
 " Pick colors with :Pick
 Plug 'DougBeney/pickachu'
+
+" Emmet for vim
+Plug 'mattn/emmet-vim'
 
 " jinja templates within html
 Plug 'lepture/vim-jinja'
@@ -255,6 +295,7 @@ Plug 'prettier/vim-prettier', {
 
 " Initialize plugin system
 call plug#end()
+
 
 " neo-vim remote
 let g:vimtex_compiler_progname = 'nvr'
